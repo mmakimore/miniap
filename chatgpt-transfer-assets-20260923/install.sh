@@ -1,0 +1,15 @@
+#!/bin/sh
+set -eu
+work=/tmp/chatgpt-transfer-assets-20260923
+rm -rf "$work"
+git clone --depth 1 https://github.com/mmakimore/miniap.git "$work/repo"
+cd "$work/repo/chatgpt-transfer-assets-20260923"
+cat part-001.txt part-002.txt part-003.txt part-004.txt part-005.txt part-006.txt part-007.txt part-008.txt part-009.txt part-010.txt part-011.txt part-012.txt part-013.txt part-014.txt part-015.txt part-016.txt part-017.txt part-018.txt part-019.txt part-020.txt part-021.txt part-022.txt part-023.txt part-024.txt part-025.txt part-026.txt part-027.txt part-028-01.txt part-028-02.txt part-028-03.txt part-028-04.txt | base64 -d > "$work/server-upload-assets.zip"
+echo "98756470b6383ce2efdc01906f067ede8d1cb8b18ceaa245f24d75bf02979c70  $work/server-upload-assets.zip" | sha256sum -c -
+mkdir -p "$work/unpack"
+unzip -q "$work/server-upload-assets.zip" -d "$work/unpack"
+cd "$work/unpack"
+sha256sum -c SHA256SUMS.txt
+sudo -n cp -- *.png /var/www/tilda-assets/
+cd /var/www/tilda-assets
+sha256sum -c "$work/unpack/SHA256SUMS.txt"
